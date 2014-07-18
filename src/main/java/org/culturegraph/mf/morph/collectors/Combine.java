@@ -41,14 +41,21 @@ public final class Combine extends AbstractFlushingCollect {
 
 	@Override
 	protected void emit() {
+
 		final String name = StringUtil.format(getName(), variables);
 		final String value = StringUtil.format(getValue(), variables);
+
+		System.out.println(this + "in emit with name = '" + name + "' :: value = '" + value + "'");
+
 		getNamedValueReceiver().receive(name, value, this, getRecordCount(),
 				getEntityCount());
 	}
 
 	@Override
 	protected boolean isComplete() {
+
+		System.out.println(this + "in isComplete with = '" + sourcesLeft.isEmpty() + "'");
+
 		return sourcesLeft.isEmpty();
 	}
 
@@ -67,6 +74,9 @@ public final class Combine extends AbstractFlushingCollect {
 
 	@Override
 	protected void clear() {
+
+		System.out.println(this + "in clear");
+
 		sourcesLeft.addAll(sources);
 		variables.clear();
 	}

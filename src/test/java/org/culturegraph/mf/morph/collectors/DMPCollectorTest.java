@@ -15,31 +15,14 @@
  */
 package org.culturegraph.mf.morph.collectors;
 
-import org.culturegraph.mf.morph.ConditionAware;
-import org.culturegraph.mf.morph.FlushListener;
-import org.culturegraph.mf.morph.Metamorph;
-import org.culturegraph.mf.morph.NamedValuePipe;
+import org.culturegraph.mf.test.TestSuite;
+import org.culturegraph.mf.test.TestSuite.TestDefinitions;
+import org.junit.runner.RunWith;
 
 /**
- * Base interface for all classes which act as collectors
- * in {@link Metamorph}.
- *
- * @author Markus Michael Geipel
- *
+ * @author tgaengler
  */
-public interface Collect extends FlushListener, ConditionAware,
-		NamedValuePipe {
-
-	void setWaitForFlush(final boolean waitForFlush);
-
-	void setIncludeSubEntities(final boolean includeSubEntities);
-
-	void setSameEntity(boolean sameEntity);
-
-	void setReset(boolean reset);
-
-	String getName();
-
-	void setName(String name);
-
+@RunWith(TestSuite.class)
+@TestDefinitions({ "DMPCombineTest.xml" })
+public final class DMPCollectorTest {/* bind to xml test */
 }
