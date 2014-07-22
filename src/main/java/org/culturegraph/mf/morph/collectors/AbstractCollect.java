@@ -10,6 +10,11 @@ package org.culturegraph.mf.morph.collectors;
 import org.culturegraph.mf.morph.AbstractNamedValuePipe;
 import org.culturegraph.mf.morph.Metamorph;
 import org.culturegraph.mf.morph.NamedValueSource;
+import org.culturegraph.mf.types.MultiHashMap;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Common basis for {@link Entity}, {@link Combine} etc.
@@ -31,8 +36,9 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	private boolean				includeSubEntities;
 	private int					currentHierarchicalEntity	= 0;
 	private int					oldHierarchicalEntity		= 0;
+	private Map<String, List<String>> hierarchicalEntityEmitBuffer;
 
-	private NamedValueSource	conditionSource;
+	private NamedValueSource conditionSource;
 
 	public AbstractCollect(final Metamorph metamorph) {
 		super();
@@ -48,6 +54,11 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 		System.out.println(this.getName() + " in includeSubEntities with = '" + includeSubEntitiesArg + "'");
 
 		includeSubEntities = includeSubEntitiesArg;
+
+		if (includeSubEntities) {
+
+			hierarchicalEntityEmitBuffer = new LinkedHashMap<String, List<String>>();
+		}
 	}
 
 	protected final boolean getIncludeSubEntities() {
@@ -55,6 +66,11 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 		System.out.println(this.getName() + " in includeSubEntities with = '" + includeSubEntities + "'");
 
 		return includeSubEntities;
+	}
+
+	protected final Map<String, List<String>> getHierarchicalEntityEmitBuffer() {
+
+		return hierarchicalEntityEmitBuffer;
 	}
 
 	protected final int getRecordCount() {
@@ -164,6 +180,11 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 		resetCondition();
 	}
 
+	protected final NamedValueSource getConditionSource() {
+
+		return conditionSource;
+	}
+
 	public final String getValue() {
 
 		System.out.println(this.getName() + " in getValue with = '" + value + "'");
@@ -266,6 +287,20 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 		System.out.println(this.getName() + " in receive with not-wait-for-flus = '" + !waitForFlush + "' :: isConditionMet = '"
 				+ isConditionMet() + "' :: isComplete = '" + isComplete() + "'");
+
+		if(getIncludeSubEntities()) {
+
+			System.out.println(this.getName() + " in receive => for includeSubEntities");
+
+			if(isConditionMet() && isComplete()) {
+
+				System.out.println(this.getName() + " in receive => emit for includeSubEntities");
+
+				emit();
+			}
+
+			return;
+		}
 
 		if (!waitForFlush && isConditionMet() && isComplete()) {
 

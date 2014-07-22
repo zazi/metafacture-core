@@ -8,6 +8,8 @@
 package org.culturegraph.mf.morph.collectors;
 
 import org.culturegraph.mf.morph.Metamorph;
+import org.culturegraph.mf.morph.NamedValuePipe;
+import org.culturegraph.mf.morph.NamedValueSource;
 
 /**
  * Common basis for {@link Entity}, {@link Combine} etc.
@@ -34,7 +36,17 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 
 			System.out.println(this.getName() + " in flush => emit");
 
-			emit();
+			if(!getIncludeSubEntities()) {
+
+				emit();
+			} else {
+
+				if(Combine.class.isInstance(this)) {
+
+					((Combine) this).emitHierarchicalEntityBuffer();
+				}
+			}
+
 			if (getReset()) {
 
 				System.out.println(this.getName() + " in flush => reset");
@@ -44,11 +56,17 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 			}
 		}
 
-		updateHierarchicalEntity(entityCount);
+		if (getIncludeSubEntities()) {
+
+			updateHierarchicalEntity(entityCount);
+			setConditionMet(false);
+			clear();
+		}
 
 		System.out.println(this.getName() + "\t    END in flush with recordCount = '" + recordCount + "' :: entityCount = '" + entityCount
 				+ "' :: isSameRecord = '" + isSameRecord(recordCount) + "' :: sameEntityConstraintSatisfied = '"
-				+ sameEntityConstraintSatisfied(entityCount) + "' :: isConditionMet = '" + isConditionMet() + "' :: currentHierarchicalEntity = '" + entityCount + "'");
+				+ sameEntityConstraintSatisfied(entityCount) + "' :: isConditionMet = '" + isConditionMet() + "' :: currentHierarchicalEntity = '"
+				+ entityCount + "'");
 		System.out.println(this.getName() + "    END in flush\n\n");
 	}
 
