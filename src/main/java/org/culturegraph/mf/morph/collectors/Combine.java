@@ -45,7 +45,7 @@ public final class Combine extends AbstractFlushingCollect {
 		final String name = StringUtil.format(getName(), variables);
 		final String value = StringUtil.format(getValue(), variables);
 
-		System.out.println(this + "in emit with name = '" + name + "' :: value = '" + value + "'");
+		System.out.println(((Combine) this).getName() + " in emit with name = '" + name + "' :: value = '" + value + "' :: recordCount = '" + getRecordCount() + "' :: entityCount = '" + getEntityCount() + "'");
 
 		getNamedValueReceiver().receive(name, value, this, getRecordCount(),
 				getEntityCount());
@@ -54,7 +54,7 @@ public final class Combine extends AbstractFlushingCollect {
 	@Override
 	protected boolean isComplete() {
 
-		System.out.println(this + "in isComplete with = '" + sourcesLeft.isEmpty() + "'");
+		System.out.println(((Combine) this).getName() + " in isComplete with = '" + sourcesLeft.isEmpty() + "'");
 
 		return sourcesLeft.isEmpty();
 	}
@@ -62,6 +62,9 @@ public final class Combine extends AbstractFlushingCollect {
 	@Override
 	protected void receive(final String name, final String value,
 			final NamedValueSource source) {
+
+		System.out.println(((Combine) this).getName() + " in receive with name = '" + name + "' :: value = '" + value + "'");
+
 		variables.put(name, value);
 		sourcesLeft.remove(source);
 	}
@@ -75,7 +78,7 @@ public final class Combine extends AbstractFlushingCollect {
 	@Override
 	protected void clear() {
 
-		System.out.println(this + "in clear");
+		System.out.println(((Combine) this).getName() + " in clear");
 
 		sourcesLeft.addAll(sources);
 		variables.clear();

@@ -29,6 +29,8 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	private boolean				waitForFlush;
 	private boolean				conditionMet;
 	private boolean				includeSubEntities;
+	private int					currentHierarchicalEntity	= 0;
+	private int					oldHierarchicalEntity		= 0;
 
 	private NamedValueSource	conditionSource;
 
@@ -43,49 +45,49 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 	public final void setIncludeSubEntities(final boolean includeSubEntitiesArg) {
 
-		System.out.println(this + "in includeSubEntities with = '" + includeSubEntitiesArg + "'");
+		System.out.println(this.getName() + " in includeSubEntities with = '" + includeSubEntitiesArg + "'");
 
 		includeSubEntities = includeSubEntitiesArg;
 	}
 
 	protected final boolean getIncludeSubEntities() {
 
-		System.out.println(this + "in includeSubEntities with = '" + includeSubEntities + "'");
+		System.out.println(this.getName() + " in includeSubEntities with = '" + includeSubEntities + "'");
 
 		return includeSubEntities;
 	}
 
 	protected final int getRecordCount() {
 
-		System.out.println(this + "in getEntityCount with = '" + oldRecord + "'");
+		System.out.println(this.getName() + " in getEntityCount with = '" + oldRecord + "'");
 
 		return oldRecord;
 	}
 
 	protected final int getEntityCount() {
 
-		System.out.println(this + "in getEntityCount with = '" + oldEntity + "'");
+		System.out.println(this.getName() + " in getEntityCount with = '" + oldEntity + "'");
 
 		return oldEntity;
 	}
 
 	protected final boolean isConditionMet() {
 
-		System.out.println(this + "in isConditionMet with = '" + conditionMet + "'");
+		System.out.println(this.getName() + " in isConditionMet with = '" + conditionMet + "'");
 
 		return conditionMet;
 	}
 
 	protected final void setConditionMet(final boolean conditionMet) {
 
-		System.out.println(this + "in setConditionMet with = '" + conditionMet + "'");
+		System.out.println(this.getName() + " in setConditionMet with = '" + conditionMet + "'");
 
 		this.conditionMet = conditionMet;
 	}
 
 	protected final void resetCondition() {
 
-		System.out.println(this + "in resetCondition with = '" + (conditionSource == null) + "'");
+		System.out.println(this.getName() + " in resetCondition with = '" + (conditionSource == null) + "'");
 
 		setConditionMet(conditionSource == null);
 	}
@@ -93,7 +95,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	@Override
 	public final void setWaitForFlush(final boolean waitForFlush) {
 
-		System.out.println(this + "in setWaitForFlush with = '" + waitForFlush + "'");
+		System.out.println(this.getName() + " in setWaitForFlush with = '" + waitForFlush + "'");
 
 		this.waitForFlush = waitForFlush;
 		// metamorph.addEntityEndListener(this, flushEntity);
@@ -102,14 +104,14 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	@Override
 	public final void setSameEntity(final boolean sameEntity) {
 
-		System.out.println(this + "in setSameEntity with = '" + sameEntity + "'");
+		System.out.println(this.getName() + " in setSameEntity with = '" + sameEntity + "'");
 
 		this.sameEntity = sameEntity;
 	}
 
 	public final boolean getReset() {
 
-		System.out.println(this + "in getReset with = '" + resetAfterEmit + "'");
+		System.out.println(this.getName() + " in getReset with = '" + resetAfterEmit + "'");
 
 		return resetAfterEmit;
 	}
@@ -117,25 +119,45 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	@Override
 	public final void setReset(final boolean reset) {
 
-		System.out.println(this + "in setReset with = '" + reset + "'");
+		System.out.println(this.getName() + " in setReset with = '" + reset + "'");
 
 		this.resetAfterEmit = reset;
 	}
 
 	@Override
 	public final String getName() {
+
+		// System.out.println(name + " in getName with = '" + name + "'");
+
 		return name;
 	}
 
 	@Override
 	public final void setName(final String name) {
+
+		System.out.println(name + " in setName with = '" + name + "'");
+
 		this.name = name;
 	}
 
 	@Override
 	public final void setConditionSource(final NamedValueSource source) {
 
-		System.out.println(this + "in setConditionSource with = '" + source + "'");
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(this.getName() + " in setConditionSource with = '" + source + "'");
+
+		if (source != null && Combine.class.isInstance(source)) {
+
+			final Combine combine = (Combine) source;
+
+			sb.append(" :: combine.name = '" + combine.getName() + "' :: combine.value = '" + combine.getName() + "' :: combine.isConditionMet = '"
+					+ combine.isConditionMet() + "' :: combine.entityCount = '" + combine.getEntityCount() + "' :: combine.recordCount = '"
+					+ combine.getRecordCount() + "'");
+
+		}
+
+		System.out.println(sb.toString());
 
 		conditionSource = source;
 		conditionSource.setNamedValueReceiver(this);
@@ -144,7 +166,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 	public final String getValue() {
 
-		System.out.println(this + "in getValue with = '" + value + "'");
+		System.out.println(this.getName() + " in getValue with = '" + value + "'");
 
 		return value;
 	}
@@ -154,35 +176,62 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	 */
 	public final void setValue(final String value) {
 
-		System.out.println(this + "in setValue with = '" + value + "'");
+		System.out.println(this.getName() + " in setValue with = '" + value + "'");
 
 		this.value = value;
 	}
 
 	protected final void updateCounts(final int currentRecord, final int currentEntity) {
 
-		System.out.println(this + "in updateCounts with currentRecord = '" + currentRecord + "' :: currentEntity = '" + currentEntity + "'");
+		System.out.println(this.getName() + " in updateCounts with currentRecord = '" + currentRecord + "' :: currentEntity = '"
+				+ currentEntity + "'");
 
 		if (!isSameRecord(currentRecord)) {
+
+			System.out.println(this.getName() + " in updateCounts => is not same record");
+
 			resetCondition();
 			clear();
 			oldRecord = currentRecord;
 		}
 		if (resetNeedFor(currentEntity)) {
+
+			System.out.println(this.getName() + " in updateCounts => reset needed for");
+
 			resetCondition();
 			clear();
 		}
 		oldEntity = currentEntity;
 	}
 
+	protected void updateHierarchicalEntity(final int entityCount) {
+
+		System.out.println("in updateHierarchicalEntiy with entityCount = '" + entityCount + "' :: oldHierarchicalEntity = '" + oldHierarchicalEntity
+				+ "' :: currentHierarchicalEntity = '" + currentHierarchicalEntity + "'");
+
+		oldHierarchicalEntity = currentHierarchicalEntity;
+		currentHierarchicalEntity = entityCount;
+	}
+
 	private boolean resetNeedFor(final int currentEntity) {
 
-		System.out.println(this + "in resetNeedFor with currentEntity = '" + currentEntity + "' :: sameEntity = '" + sameEntity
-				+ "' :: oldEntity = '" + oldEntity + "' => '" + (sameEntity && oldEntity != currentEntity) + "'");
+		boolean reset = false;
 
-		if(getIncludeSubEntities()) {
+		if (!sameEntity) {
 
-			return sameEntity && oldEntity > currentEntity;
+			reset = true;
+		}
+
+		System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + currentEntity + "' :: sameEntity = '"
+				+ sameEntity + "' :: oldEntity = '" + oldEntity + "' => '" + reset + "' :: currentHierarchicalEntity = '" + currentHierarchicalEntity
+				+ "' :: oldHierarchicalEntity = '" + oldHierarchicalEntity + "'");
+
+		if (getIncludeSubEntities()) {
+
+			if (sameEntity) {
+
+				return false;
+			}
 		}
 
 		return sameEntity && oldEntity != currentEntity;
@@ -190,7 +239,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 	protected final boolean isSameRecord(final int currentRecord) {
 
-		System.out.println(this + "in isSameRecord with = '" + currentRecord + "'");
+		System.out.println(this.getName() + " in isSameRecord with = '" + currentRecord + "' :: oldRecord = " + oldRecord + "'");
 
 		return currentRecord == oldRecord;
 	}
@@ -198,17 +247,35 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	@Override
 	public final void receive(final String name, final String value, final NamedValueSource source, final int recordCount, final int entityCount) {
 
+		System.out.println(this.getName() + " in receive with name = '" + name + "' :: value = '" + value + "' :: source = '" + source
+				+ "' :: recordCount = '" + recordCount + "' :: entityCount = '" + entityCount + "'");
+
 		updateCounts(recordCount, entityCount);
 
 		if (source == conditionSource) {
+
+			System.out.println(this.getName() + " in receive with name => conditionMet (source == conditionSource)");
+
 			conditionMet = true;
 		} else {
+
+			System.out.println(this.getName() + " in receive with name => condition not met (source != conditionSource)");
+
 			receive(name, value, source);
 		}
 
+		System.out.println(this.getName() + " in receive with not-wait-for-flus = '" + !waitForFlush + "' :: isConditionMet = '"
+				+ isConditionMet() + "' :: isComplete = '" + isComplete() + "'");
+
 		if (!waitForFlush && isConditionMet() && isComplete()) {
+
+			System.out.println(this.getName() + " in receive => emit");
+
 			emit();
 			if (resetAfterEmit) {
+
+				System.out.println(this.getName() + " in recei => emit => reset after emit");
+
 				resetCondition();
 				clear();
 			}
@@ -217,12 +284,14 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 	protected final boolean sameEntityConstraintSatisfied(final int entityCount) {
 
-		System.out.println(this + "in sameEntityConstraintSatisfied with entityCount = '" + entityCount + "' :: sameEntity = '" + sameEntity
-				+ "' :: oldEntity = '" + oldEntity + "' => '" + (!sameEntity || oldEntity == entityCount) + "'");
+		System.out.println(this.getName() + " in sameEntityConstraintSatisfied with entityCount = '" + entityCount
+				+ "' :: sameEntity = '" + sameEntity + "' :: oldEntity = '" + oldEntity + "' :: currentHierarchuicalEntity = '"
+				+ currentHierarchicalEntity + "' :: oldHierarchicalEntity = '" + oldHierarchicalEntity + "' => '"
+				+ (!sameEntity || oldHierarchicalEntity <= entityCount) + "'");
 
-		if(getIncludeSubEntities()) {
+		if (getIncludeSubEntities()) {
 
-			return !sameEntity || oldEntity <= entityCount;
+			return !sameEntity || oldHierarchicalEntity <= entityCount;
 		}
 
 		return !sameEntity || oldEntity == entityCount;

@@ -38,6 +38,9 @@ public final class Flush implements NamedValueReceiver {
 
 	@Override
 	public void receive(final String name, final String value, final NamedValueSource source, final int recordCount, final int entityCount) {
+
+		System.out.println(this + "in Flush receive with name = '" + name + "' :: value '" + value + "' :: recordCount = '" + recordCount + "' :: entityCount = '" + entityCount + "' :: namedvaluesource = '" + source + "'");
+
 		listener.flush(recordCount, entityCount);
 	}
 

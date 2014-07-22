@@ -24,21 +24,32 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 	@Override
 	public final void flush(final int recordCount, final int entityCount) {
 
-		System.out.println(this + "in flush with recordCount = '" + recordCount + "' :: entityCount = '" + entityCount + "'");
+		System.out.println("\n\n" + this.getName() + "    START in flush");
+
+		System.out.println(this.getName() + "\t    START in flush with recordCount = '" + recordCount + "' :: entityCount = '" + entityCount
+				+ "' :: isSameRecord = '" + isSameRecord(recordCount) + "' :: sameEntityConstraintSatisfied = '"
+				+ sameEntityConstraintSatisfied(entityCount) + "' :: isConditionMet = '" + isConditionMet() + "'");
 
 		if (isSameRecord(recordCount) && sameEntityConstraintSatisfied(entityCount) && isConditionMet()) {
 
-			System.out.println(this + "in flush => emit");
+			System.out.println(this.getName() + " in flush => emit");
 
 			emit();
 			if (getReset()) {
 
-				System.out.println(this + "in flush => reset");
+				System.out.println(this.getName() + " in flush => reset");
 
 				resetCondition();
 				clear();
 			}
 		}
+
+		updateHierarchicalEntity(entityCount);
+
+		System.out.println(this.getName() + "\t    END in flush with recordCount = '" + recordCount + "' :: entityCount = '" + entityCount
+				+ "' :: isSameRecord = '" + isSameRecord(recordCount) + "' :: sameEntityConstraintSatisfied = '"
+				+ sameEntityConstraintSatisfied(entityCount) + "' :: isConditionMet = '" + isConditionMet() + "' :: currentHierarchicalEntity = '" + entityCount + "'");
+		System.out.println(this.getName() + "    END in flush\n\n");
 	}
 
 }
