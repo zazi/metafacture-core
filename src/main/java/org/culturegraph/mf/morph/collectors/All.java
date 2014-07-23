@@ -60,6 +60,10 @@ public final class All extends AbstractFlushingCollect {
 		if (sourcesLeft.isEmpty()) {
 			final String name = StringUtil.fallback(getName(), DEFAULT_NAME);
 			final String value = StringUtil.fallback(getValue(), DEFAULT_VALUE);
+
+			System.out.println(this.getName() + " in emit with name = '" + name + "' :: value = '" + value + "' :: recordCount = '"
+					+ getRecordCount() + "' :: entityCount = '" + getEntityCount() + "'");
+
 			getNamedValueReceiver().receive(name, value, this, getRecordCount(), getEntityCount());
 		}
 	}

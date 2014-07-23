@@ -36,15 +36,17 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 
 			System.out.println(this.getName() + " in flush => emit");
 
-			if(!getIncludeSubEntities()) {
+			if (!getIncludeSubEntities()) {
 
 				emit();
 			} else {
 
-				if(Combine.class.isInstance(this)) {
+				if (Combine.class.isInstance(this)) {
 
 					((Combine) this).emitHierarchicalEntityBuffer();
 				}
+
+				emit();
 			}
 
 			if (getReset()) {
@@ -60,7 +62,12 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 
 			updateHierarchicalEntity(entityCount);
 			setConditionMet(false);
-			clear();
+
+			if (getReset()) {
+
+				resetCondition();
+				clear();
+			}
 		}
 
 		System.out.println(this.getName() + "\t    END in flush with recordCount = '" + recordCount + "' :: entityCount = '" + entityCount

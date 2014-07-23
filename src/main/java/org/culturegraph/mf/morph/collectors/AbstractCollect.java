@@ -37,6 +37,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	private int					currentHierarchicalEntity	= 0;
 	private int					oldHierarchicalEntity		= 0;
 	private Map<String, List<String>> hierarchicalEntityEmitBuffer;
+	private int matchEntity;
 
 	private NamedValueSource conditionSource;
 
@@ -278,6 +279,16 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 			System.out.println(this.getName() + " in receive with name => conditionMet (source == conditionSource)");
 
 			conditionMet = true;
+
+			if(Collect.class.isInstance(conditionSource)) {
+
+				if(((Collect) conditionSource).getName().equals(name) && Boolean.valueOf(value)) {
+
+					matchEntity = entityCount;
+
+					return;
+				}
+			}
 		} else {
 
 			System.out.println(this.getName() + " in receive with name => condition not met (source != conditionSource)");
@@ -292,11 +303,14 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 			System.out.println(this.getName() + " in receive => for includeSubEntities");
 
-			if(isConditionMet() && isComplete()) {
+			if(isConditionMet() && isComplete() && matchEntity == entityCount) {
 
 				System.out.println(this.getName() + " in receive => emit for includeSubEntities");
 
 				emit();
+
+				// do something with matchEntity, e.g., reset
+				matchEntity = 0;
 			}
 
 			return;
