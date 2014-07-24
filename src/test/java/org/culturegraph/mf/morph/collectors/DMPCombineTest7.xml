@@ -43,6 +43,42 @@
 							</cgxml:entity>
 						</cgxml:entity>
 						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="3"/>
+							<cgxml:literal name="m" value="3"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="AAAAAAAAAAAAAAAAAAAAAAA"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="a"/>
+								<cgxml:literal name="value" value="sub5555555555555555555555"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="3"/>
+							<cgxml:literal name="m" value="2"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="a"/>
+								<cgxml:literal name="value" value="sub6666666666666666666666666"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="2"/>
+							<cgxml:literal name="m" value="2"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="c"/>
+								<cgxml:literal name="value" value="sub77777777777777777777777777"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
 							<cgxml:literal name="l" value="2"/>
 							<cgxml:literal name="m" value="4"/>
 							<cgxml:entity name="subfield">
@@ -65,7 +101,7 @@
 				<mm:rules>
 					<mm:combine name="COMBINE" value="${one}" flushWith="e" sameEntity="true" reset="true" includeSubEntities="true">
 						<mm:if>
-							<mm:all name="CONDITIONALL" reset="true">
+							<mm:all name="CONDITIONALL" reset="true" flushWith="e.subfield.code" includeSubEntities="true">
 								<mm:data
 										source="e.l">
 									<mm:equals string="2"/>

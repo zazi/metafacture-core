@@ -32,7 +32,8 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 				+ "' :: isSameRecord = '" + isSameRecord(recordCount) + "' :: sameEntityConstraintSatisfied = '"
 				+ sameEntityConstraintSatisfied(entityCount) + "' :: isConditionMet = '" + isConditionMet() + "'");
 
-		if (isSameRecord(recordCount) && sameEntityConstraintSatisfied(entityCount) && isConditionMet()) {
+		if (isSameRecord(recordCount) && sameEntityConstraintSatisfied(entityCount)
+				&& (isConditionMet() || (getIncludeSubEntities() && isHierarchicalEntityEmitBufferFilled()))) {
 
 			System.out.println(this.getName() + " in flush => emit");
 
@@ -44,29 +45,56 @@ public abstract class AbstractFlushingCollect extends AbstractCollect {
 				if (Combine.class.isInstance(this)) {
 
 					((Combine) this).emitHierarchicalEntityBuffer();
-				}
+				} else {
 
-				emit();
+					emit();
+				}
 			}
 
 			if (getReset()) {
 
 				System.out.println(this.getName() + " in flush => reset");
 
-				resetCondition();
-				clear();
+				// to avoid condition reset, if not all conditions where satisfied + hierarchical entity end was not met
+				if (!(getIncludeSubEntities() && All.class.isInstance(this) && !this.isComplete())) {
+
+					resetCondition();
+					clear();
+				}
 			}
 		}
 
 		if (getIncludeSubEntities()) {
 
 			updateHierarchicalEntity(entityCount);
-			setConditionMet(false);
+
+			// to avoid condition reset before hiearchical entity change
+			if (!(All.class.isInstance(this) && !this.isComplete())) {
+
+				setConditionMet(false);
+			}
 
 			if (getReset()) {
 
-				resetCondition();
-				clear();
+				// to avoid condition reset before hiearchical entity change
+				if (!(All.class.isInstance(this) && !this.isComplete())) {
+
+					resetCondition();
+					clear();
+				}
+			}
+
+			if (Combine.class.isInstance(this) && this.getConditionSource() != null && All.class.isInstance(this.getConditionSource())) {
+
+				// force condition reset on hierarchical entity change
+
+				System.out.println("XXXXXXXXXXXXXXXXXXX " + ((All) this.getConditionSource()).getConditionSource());
+
+				((All) this.getConditionSource()).resetCondition();
+				((All) this.getConditionSource()).clear();
+				((All) this.getConditionSource()).updateHierarchicalEntity(entityCount);
+				// ((All) this.getConditionSource()).setConditionMet(false);
+				((All) this.getConditionSource()).forcedNonMatchedEmit();
 			}
 		}
 

@@ -49,7 +49,7 @@
 				<mm:rules>
 					<mm:combine name="@ok" value="${one}" flushWith="e" sameEntity="true" reset="true" includeSubEntities="true">
 						<mm:if>
-							<mm:all name="CONDITIONALL" reset="true" flushWith="e" includeSubEntities="true">
+							<mm:all name="CONDITIONALL" reset="true" flushWith="e.m" includeSubEntities="true">
 								<mm:data
 										source="e.l">
 									<mm:equals string="2"/>

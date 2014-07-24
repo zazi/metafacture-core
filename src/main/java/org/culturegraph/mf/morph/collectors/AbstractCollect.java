@@ -37,7 +37,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	private int					currentHierarchicalEntity	= 0;
 	private int					oldHierarchicalEntity		= 0;
 	private Map<String, List<String>> hierarchicalEntityEmitBuffer;
-	private int matchEntity;
+	private Integer matchEntity;
 
 	private NamedValueSource conditionSource;
 
@@ -74,16 +74,31 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 		return hierarchicalEntityEmitBuffer;
 	}
 
+	protected boolean isHierarchicalEntityEmitBufferFilled() {
+
+		return hierarchicalEntityEmitBuffer != null && !hierarchicalEntityEmitBuffer.isEmpty();
+	}
+
+	protected final Integer getMatchEntity() {
+
+		return matchEntity;
+	}
+
+	protected void setMatchEntity(final Integer matchEntityArg) {
+
+		matchEntity = matchEntityArg;
+	}
+
 	protected final int getRecordCount() {
 
-		System.out.println(this.getName() + " in getEntityCount with = '" + oldRecord + "'");
+		System.out.println(this.getName() + " in getRecordCount (oldRecord) with = '" + oldRecord + "'");
 
 		return oldRecord;
 	}
 
 	protected final int getEntityCount() {
 
-		System.out.println(this.getName() + " in getEntityCount with = '" + oldEntity + "'");
+		System.out.println(this.getName() + " in getEntityCount with (oldEntity) = '" + oldEntity + "'");
 
 		return oldEntity;
 	}
@@ -183,6 +198,8 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 	protected final NamedValueSource getConditionSource() {
 
+		System.out.println(this.getName() + " in getConditionSource with = '" + conditionSource + "'");
+
 		return conditionSource;
 	}
 
@@ -280,11 +297,21 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 			conditionMet = true;
 
-			if(Collect.class.isInstance(conditionSource)) {
+			if(getIncludeSubEntities() && Collect.class.isInstance(conditionSource)) {
 
-				if(((Collect) conditionSource).getName().equals(name) && Boolean.valueOf(value)) {
+				if(((Collect) conditionSource).getName().equals(name)) {
 
-					matchEntity = entityCount;
+					final boolean condition = Boolean.valueOf(value);
+
+					if(condition) {
+
+						matchEntity = entityCount;
+					} else {
+
+						// do something with matchEntity, e.g., reset
+						matchEntity = null;
+						conditionMet = false;
+					}
 
 					return;
 				}
@@ -303,14 +330,11 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 			System.out.println(this.getName() + " in receive => for includeSubEntities");
 
-			if(isConditionMet() && isComplete() && matchEntity == entityCount) {
+			if(isConditionMet() && isComplete() && matchEntity != null && matchEntity <= entityCount) {
 
 				System.out.println(this.getName() + " in receive => emit for includeSubEntities");
 
 				emit();
-
-				// do something with matchEntity, e.g., reset
-				matchEntity = 0;
 			}
 
 			return;

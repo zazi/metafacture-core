@@ -22,6 +22,10 @@
 								<cgxml:literal name="value" value="sub2"/>
 								<cgxml:literal name="value" value="sub3333333333333333333333333"/>
 							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="b"/>
+								<cgxml:literal name="value" value="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXx"/>
+							</cgxml:entity>
 						</cgxml:entity>
 						<cgxml:entity name="e">
 							<cgxml:literal name="l" value="2"/>
@@ -46,13 +50,13 @@
 				<mm:rules>
 					<mm:combine name="COMBINE" value="${one}" flushWith="e" reset="true" sameEntity="true" includeSubEntities="true">
 						<mm:if>
-							<mm:all name="CONDITIONALL" reset="true" flushWith="e" includeSubEntities="true">
+							<mm:all name="CONDITIONALL" reset="true" flushWith="e.subfield.code" includeSubEntities="true">
 								<mm:data
-										source="e.l">
+										source="e.m">
 									<mm:equals string="2"/>
 								</mm:data>
 								<mm:data
-										source="e.m">
+										source="e.l">
 									<mm:equals string="2"/>
 								</mm:data>
 								<mm:data
