@@ -19,6 +19,9 @@
 							<cgxml:literal name="m" value="2"/>
 							<cgxml:entity name="subfield">
 								<cgxml:literal name="code" value="a"/>
+								<cgxml:entity name="subsubfield">
+									<cgxml:literal name="subl" value="xxx2xxx"/>
+								</cgxml:entity>
 								<cgxml:literal name="value" value="sub2"/>
 							</cgxml:entity>
 						</cgxml:entity>
@@ -48,15 +51,15 @@
 							<mm:all name="CONDITIONALL" reset="true" flushWith="e.subfield.code" includeSubEntities="true">
 								<mm:data
 										source="e.l">
-									<mm:equals string="2"/>
+									<mm:regexp match="2"/>
 								</mm:data>
 								<mm:data
 										source="e.m">
-									<mm:equals string="2"/>
+									<mm:regexp match="2"/>
 								</mm:data>
 								<mm:data
 										source="e.subfield.code">
-									<mm:equals string="a"/>
+									<mm:regexp match="a"/>
 								</mm:data>
 							</mm:all>
 						</mm:if>

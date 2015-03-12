@@ -1,16 +1,23 @@
 /*
- * Copyright 2013, 2014 Deutsche Nationalbibliothek Licensed under the Apache License, Version 2.0 the "License"; you may not use
- * this file except in compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
+ *  Copyright 2013, 2014 Deutsche Nationalbibliothek
+ *
+ *  Licensed under the Apache License, Version 2.0 the "License";
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 package org.culturegraph.mf.morph.collectors;
 
 import org.culturegraph.mf.morph.AbstractNamedValuePipe;
 import org.culturegraph.mf.morph.Metamorph;
 import org.culturegraph.mf.morph.NamedValueSource;
-import org.culturegraph.mf.types.MultiHashMap;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,18 +28,20 @@ import java.util.Map;
  *
  * @author Markus Michael Geipel
  * @author Christoph Böhme
+ *
  */
-public abstract class AbstractCollect extends AbstractNamedValuePipe implements Collect {
+public abstract class AbstractCollect extends AbstractNamedValuePipe
+		implements Collect {
 
-	private int					oldRecord;
-	private int					oldEntity;
-	private boolean				resetAfterEmit;
-	private boolean				sameEntity;
-	private String				name;
-	private String				value;
-	private final Metamorph		metamorph;
-	private boolean				waitForFlush;
-	private boolean				conditionMet;
+	private int oldRecord;
+	private int oldEntity;
+	private boolean resetAfterEmit;
+	private boolean sameEntity;
+	private String name;
+	private String value;
+	private final Metamorph metamorph;
+	private boolean waitForFlush;
+	private boolean conditionMet;
 	private boolean				includeSubEntities;
 	private int					currentHierarchicalEntity	= 0;
 	private int					oldHierarchicalEntity		= 0;
@@ -211,7 +220,8 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 	}
 
 	/**
-	 * @param value the value to set
+	 * @param value
+	 *            the value to set
 	 */
 	public final void setValue(final String value) {
 
@@ -254,14 +264,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 
 	private boolean resetNeedFor(final int currentEntity) {
 
-		boolean reset = false;
-
-		if (!sameEntity) {
-
-			reset = true;
-		}
-
-		System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + currentEntity + "' :: sameEntity = '"
+System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + currentEntity + "' :: sameEntity = '"
 				+ sameEntity + "' :: oldEntity = '" + oldEntity + "' => '" + reset + "' :: currentHierarchicalEntity = '" + currentHierarchicalEntity
 				+ "' :: oldHierarchicalEntity = '" + oldHierarchicalEntity + "'");
 
@@ -292,7 +295,7 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 		updateCounts(recordCount, entityCount);
 
 		if (source == conditionSource) {
-
+			
 			System.out.println(this.getName() + " in receive with name => conditionMet (source == conditionSource)");
 
 			conditionMet = true;
@@ -317,14 +320,8 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 				}
 			}
 		} else {
-
-			System.out.println(this.getName() + " in receive with name => condition not met (source != conditionSource)");
-
 			receive(name, value, source);
 		}
-
-		System.out.println(this.getName() + " in receive with not-wait-for-flus = '" + !waitForFlush + "' :: isConditionMet = '"
-				+ isConditionMet() + "' :: isComplete = '" + isComplete() + "'");
 
 		if(getIncludeSubEntities()) {
 
@@ -370,7 +367,8 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe implements 
 		return !sameEntity || oldEntity == entityCount;
 	}
 
-	protected abstract void receive(final String name, final String value, final NamedValueSource source);
+	protected abstract void receive(final String name, final String value,
+			final NamedValueSource source);
 
 	protected abstract boolean isComplete();
 

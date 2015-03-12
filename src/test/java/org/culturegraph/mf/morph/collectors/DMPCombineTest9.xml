@@ -3,7 +3,8 @@
 				xmlns="http://www.culturegraph.org/metamorph-test" xmlns:mm="http://www.culturegraph.org/metamorph"
 				xmlns:cgxml="http://www.culturegraph.org/cgxml">
 
-	<test-case name="combine w/ filter + include sub entities + filter on different levels + mutliple matched entities">
+	<test-case
+			name="combine w/ filter + include sub entities + filter on different levels + mutliple matched entities + multiple records, i.e. flushWith is root level (record) -> select value from filter">
 		<input type="text/x-cg+xml">
 			<cgxml:cgxml version="1.0">
 				<cgxml:records>
@@ -22,7 +23,7 @@
 								<cgxml:literal name="value" value="ZZZZZZZZZZZZZZZZZZZZZ"/>
 							</cgxml:entity>
 							<cgxml:entity name="subfield">
-								<cgxml:literal name="code" value="a"/>
+								<cgxml:literal name="code" value="aaa"/>
 								<cgxml:literal name="value" value="sub3333333333333333333333333"/>
 							</cgxml:entity>
 							<cgxml:entity name="subfield">
@@ -38,7 +39,92 @@
 								<cgxml:literal name="value" value="YYYYYYYYYYYYYYYY"/>
 							</cgxml:entity>
 							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="aaa"/>
+								<cgxml:literal name="value" value="sub44444444444444444444444444"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="3"/>
+							<cgxml:literal name="m" value="3"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="AAAAAAAAAAAAAAAAAAAAAAA"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
 								<cgxml:literal name="code" value="a"/>
+								<cgxml:literal name="value" value="sub5555555555555555555555"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="3"/>
+							<cgxml:literal name="m" value="2"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="a"/>
+								<cgxml:literal name="value" value="sub6666666666666666666666666"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="2"/>
+							<cgxml:literal name="m" value="2"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="c"/>
+								<cgxml:literal name="value" value="sub77777777777777777777777777"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="2"/>
+							<cgxml:literal name="m" value="4"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="value" value="sub4"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="3"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="value" value="sub3"/>
+							</cgxml:entity>
+						</cgxml:entity>
+					</cgxml:record>
+					<cgxml:record id="2">
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="1"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="value" value="sub1"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="2"/>
+							<cgxml:literal name="m" value="2"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="ZZZZZZZZZZZZZZZZZZZZZ"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="aaa"/>
+								<cgxml:literal name="value" value="sub3333333333333333333333333"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="b"/>
+								<cgxml:literal name="value" value="XXXXXXXXXXXXXXXXX"/>
+							</cgxml:entity>
+						</cgxml:entity>
+						<cgxml:entity name="e">
+							<cgxml:literal name="l" value="2"/>
+							<cgxml:literal name="m" value="2"/>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="z"/>
+								<cgxml:literal name="value" value="YYYYYYYYYYYYYYYY"/>
+							</cgxml:entity>
+							<cgxml:entity name="subfield">
+								<cgxml:literal name="code" value="aaa"/>
 								<cgxml:literal name="value" value="sub44444444444444444444444444"/>
 							</cgxml:entity>
 						</cgxml:entity>
@@ -99,7 +185,7 @@
 		<transformation type="text/x-metamorph+xml">
 			<mm:metamorph version="1">
 				<mm:rules>
-					<mm:combine name="COMBINE" value="${one}" flushWith="e" sameEntity="true" reset="true" includeSubEntities="true">
+					<mm:combine name="COMBINE" value="${one}" flushWith="record" sameEntity="true" reset="true" includeSubEntities="true">
 						<mm:if>
 							<mm:all name="CONDITIONALL" reset="true" flushWith="e.subfield.code" includeSubEntities="true">
 								<mm:data
@@ -112,11 +198,11 @@
 								</mm:data>
 								<mm:data
 										source="e.subfield.code">
-									<mm:regexp match="a"/>
+									<mm:regexp match="aaa"/>
 								</mm:data>
 							</mm:all>
 						</mm:if>
-						<mm:data source="e.subfield.value" name="one"/>
+						<mm:data source="e.subfield.code" name="one"/>
 					</mm:combine>
 				</mm:rules>
 			</mm:metamorph>
@@ -126,8 +212,12 @@
 			<cgxml:cgxml version="1.0">
 				<cgxml:records>
 					<cgxml:record id="1">
-						<cgxml:literal name="COMBINE" value="sub3333333333333333333333333"/>
-						<cgxml:literal name="COMBINE" value="sub44444444444444444444444444"/>
+						<cgxml:literal name="COMBINE" value="aaa"/>
+						<cgxml:literal name="COMBINE" value="aaa"/>
+					</cgxml:record>
+					<cgxml:record id="2">
+						<cgxml:literal name="COMBINE" value="aaa"/>
+						<cgxml:literal name="COMBINE" value="aaa"/>
 					</cgxml:record>
 				</cgxml:records>
 			</cgxml:cgxml>
