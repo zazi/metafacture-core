@@ -33,20 +33,20 @@ import java.util.Map;
 public abstract class AbstractCollect extends AbstractNamedValuePipe
 		implements Collect {
 
-	private int oldRecord;
-	private int oldEntity;
-	private boolean resetAfterEmit;
-	private boolean sameEntity;
-	private String name;
-	private String value;
+	private       int       oldRecord;
+	private       int       oldEntity;
+	private       boolean   resetAfterEmit;
+	private       boolean   sameEntity;
+	private       String    name;
+	private       String    value;
 	private final Metamorph metamorph;
-	private boolean waitForFlush;
-	private boolean conditionMet;
-	private boolean				includeSubEntities;
-	private int					currentHierarchicalEntity	= 0;
-	private int					oldHierarchicalEntity		= 0;
+	private       boolean   waitForFlush;
+	private       boolean   conditionMet;
+	private       boolean   includeSubEntities;
+	private int currentHierarchicalEntity = 0;
+	private int oldHierarchicalEntity     = 0;
 	private Map<String, List<String>> hierarchicalEntityEmitBuffer;
-	private Integer matchEntity;
+	private Integer                   matchEntity;
 
 	private NamedValueSource conditionSource;
 
@@ -264,7 +264,14 @@ public abstract class AbstractCollect extends AbstractNamedValuePipe
 
 	private boolean resetNeedFor(final int currentEntity) {
 
-System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + currentEntity + "' :: sameEntity = '"
+		boolean reset = false;
+
+		if (!sameEntity) {
+
+			reset = true;
+		}
+
+		System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + currentEntity + "' :: sameEntity = '"
 				+ sameEntity + "' :: oldEntity = '" + oldEntity + "' => '" + reset + "' :: currentHierarchicalEntity = '" + currentHierarchicalEntity
 				+ "' :: oldHierarchicalEntity = '" + oldHierarchicalEntity + "'");
 
@@ -295,18 +302,18 @@ System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + 
 		updateCounts(recordCount, entityCount);
 
 		if (source == conditionSource) {
-			
+
 			System.out.println(this.getName() + " in receive with name => conditionMet (source == conditionSource)");
 
 			conditionMet = true;
 
-			if(getIncludeSubEntities() && Collect.class.isInstance(conditionSource)) {
+			if (getIncludeSubEntities() && Collect.class.isInstance(conditionSource)) {
 
-				if(((Collect) conditionSource).getName().equals(name)) {
+				if (((Collect) conditionSource).getName().equals(name)) {
 
 					final boolean condition = Boolean.valueOf(value);
 
-					if(condition) {
+					if (condition) {
 
 						matchEntity = entityCount;
 					} else {
@@ -323,11 +330,11 @@ System.out.println(this.getName() + " in resetNeedFor with currentEntity = '" + 
 			receive(name, value, source);
 		}
 
-		if(getIncludeSubEntities()) {
+		if (getIncludeSubEntities()) {
 
 			System.out.println(this.getName() + " in receive => for includeSubEntities");
 
-			if(isConditionMet() && isComplete() && matchEntity != null && matchEntity <= entityCount) {
+			if (isConditionMet() && isComplete() && matchEntity != null && matchEntity <= entityCount) {
 
 				System.out.println(this.getName() + " in receive => emit for includeSubEntities");
 
