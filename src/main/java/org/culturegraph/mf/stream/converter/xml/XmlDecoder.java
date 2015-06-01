@@ -29,7 +29,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
@@ -45,17 +47,20 @@ import org.xml.sax.helpers.XMLReaderFactory;
 @FluxCommand("decode-xml")
 public final class XmlDecoder
 		extends DefaultObjectPipe<Reader, XmlReceiver> {
-
+	
 	private static final String SAX_PROPERTY_LEXICAL_HANDLER = "http://xml.org/sax/properties/lexical-handler";
 	private static final String XERCES_FEATURES_NOTIFY_BUILTIN_REFS = "http://apache.org/xml/features/scanner/notify-builtin-refs";
-
-	private final XMLReader saxReader;
+	
+	private final XMLFilter xmlPreFilter;
+	private final XMLFilter xmlFilter;
 
 	public XmlDecoder() {
 		super();
 		try {
-			saxReader = XMLReaderFactory.createXMLReader();
+			final XMLReader saxReader = XMLReaderFactory.createXMLReader();
 			saxReader.setFeature(XERCES_FEATURES_NOTIFY_BUILTIN_REFS, false);
+			xmlPreFilter = new XmlFilterEntityImpl(saxReader);
+			xmlFilter = new XMLFilterImpl(xmlPreFilter);
 		} catch (SAXException e) {
 			throw new MetafactureException(e);
 		}
@@ -64,7 +69,7 @@ public final class XmlDecoder
 	@Override
 	public void process(final Reader reader) {
 		try {
-			saxReader.parse(new InputSource(reader));
+			xmlFilter.parse(new InputSource(reader));
 		} catch (IOException e) {
 			throw new MetafactureException(e);
 		} catch (SAXException e) {
@@ -74,12 +79,13 @@ public final class XmlDecoder
 
 	@Override
 	protected void onSetReceiver() {
-		saxReader.setContentHandler(getReceiver());
-		saxReader.setDTDHandler(getReceiver());
-		saxReader.setEntityResolver(getReceiver());
-		saxReader.setErrorHandler(getReceiver());
+		xmlFilter.setContentHandler(getReceiver());
+		xmlFilter.setDTDHandler(getReceiver());
+		xmlFilter.setEntityResolver(getReceiver());
+		xmlFilter.setErrorHandler(getReceiver());
+		xmlPreFilter.setContentHandler(xmlFilter.getContentHandler());
 		try {
-			saxReader.setProperty(SAX_PROPERTY_LEXICAL_HANDLER, getReceiver());
+			xmlFilter.setProperty(SAX_PROPERTY_LEXICAL_HANDLER, getReceiver());
 		} catch (SAXNotRecognizedException e) {
 			throw new MetafactureException(e);
 		} catch (SAXNotSupportedException e) {
