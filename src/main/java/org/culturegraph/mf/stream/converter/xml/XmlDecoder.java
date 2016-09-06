@@ -18,6 +18,8 @@ package org.culturegraph.mf.stream.converter.xml;
 import java.io.IOException;
 import java.io.Reader;
 
+import javax.xml.stream.XMLInputFactory;
+
 import org.culturegraph.mf.exceptions.MetafactureException;
 import org.culturegraph.mf.framework.DefaultObjectPipe;
 import org.culturegraph.mf.framework.XmlReceiver;
@@ -50,7 +52,13 @@ public final class XmlDecoder
 	
 	private static final String SAX_PROPERTY_LEXICAL_HANDLER = "http://xml.org/sax/properties/lexical-handler";
 	private static final String XERCES_FEATURES_NOTIFY_BUILTIN_REFS = "http://apache.org/xml/features/scanner/notify-builtin-refs";
-	
+	private static final String XERCES_FEATURES_DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+	private static final String XERCES_FEATURES_USE_ENTITY_RESOLVER2 = "http://xml.org/sax/features/use-entity-resolver2";
+	private static final String XERCES_FEATURES_LOAD_EXTERNAL_DTD = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+	private static final String XERCES_FEATURES_RESOLVE_DTD_URIS = "http://xml.org/sax/features/resolve-dtd-uris";
+	private static final String XERCES_FEATURES_EXTERNAL_PARAMETER_ENTITIES = "http://xml.org/sax/features/external-parameter-entities";
+	private static final String XERCES_FEATURES_LOAD_DTD_GRAMMAR = "http://apache.org/xml/features/nonvalidating/load-dtd-grammar";
+
 	private final XMLFilter xmlPreFilter;
 	private final XMLFilter xmlFilter;
 
@@ -59,6 +67,12 @@ public final class XmlDecoder
 		try {
 			final XMLReader saxReader = XMLReaderFactory.createXMLReader();
 			saxReader.setFeature(XERCES_FEATURES_NOTIFY_BUILTIN_REFS, false);
+			saxReader.setFeature(XERCES_FEATURES_DISALLOW_DOCTYPE_DECL, false);
+			saxReader.setFeature(XERCES_FEATURES_USE_ENTITY_RESOLVER2, true);
+			saxReader.setFeature(XERCES_FEATURES_LOAD_EXTERNAL_DTD, true);
+			saxReader.setFeature(XERCES_FEATURES_RESOLVE_DTD_URIS, true);
+			saxReader.setFeature(XERCES_FEATURES_EXTERNAL_PARAMETER_ENTITIES, true);
+			saxReader.setFeature(XERCES_FEATURES_LOAD_DTD_GRAMMAR, true);
 			xmlPreFilter = new XmlFilterEntityImpl(saxReader);
 			xmlFilter = new XMLFilterImpl(xmlPreFilter);
 		} catch (SAXException e) {
