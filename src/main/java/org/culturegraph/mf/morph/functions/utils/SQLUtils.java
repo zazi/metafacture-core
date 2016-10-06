@@ -18,7 +18,7 @@ public final class SQLUtils {
 	private static final String JDBC_PREFIX_IDENTIFIER = "jdbc";
 	private static final String COLON = ":";
 	private static final String SLASH = "/";
-	private static final String DEFAULT_OPTIONS = "?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false";
+	private static final String DEFAULT_OPTIONS = "?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
 	public static Connection createSQLConnection(final String driver,
 	                                             final String databaseType,
