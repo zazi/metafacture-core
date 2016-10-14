@@ -704,6 +704,7 @@
 			<element ref="tns:isbn" />
 			<element ref="tns:issn" />
 			<element ref="tns:siphash" />
+			<element ref="tns:base64" />
 			<element ref="tns:dewey" />
 			<element ref="tns:convert-value" />
 			<element ref="tns:http-api-request" />
@@ -967,6 +968,14 @@
 	<element name="siphash">
 		<annotation>
 			<documentation>SipHash hashing.</documentation>
+		</annotation>
+		<complexType>
+		</complexType>
+	</element>
+
+	<element name="base64">
+		<annotation>
+			<documentation>Base64 hashing.</documentation>
 		</annotation>
 		<complexType>
 		</complexType>
