@@ -28,7 +28,7 @@ import org.culturegraph.mf.morph.NamedValueSource;
  * @author Markus Geipel
  *
  */
-public final class Buffer extends AbstractFunction {
+public class Buffer extends AbstractFunction {
 
 	private final List<Receipt> receipts = new ArrayList<Receipt>();
 	private int currentRecord;

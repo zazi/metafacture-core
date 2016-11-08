@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metamorph-test version="1.0"
+                xmlns="http://www.culturegraph.org/metamorph-test" xmlns:mm="http://www.culturegraph.org/metamorph"
+                xmlns:cgxml="http://www.culturegraph.org/cgxml">
+
+	<test-case name="buffer">
+		<input type="text/x-cg+xml">
+			<cgxml:cgxml version="1.0">
+				<cgxml:records>
+					<cgxml:record id="0">
+						<cgxml:literal name="d1" value="Aloha" />
+					</cgxml:record>
+					<cgxml:record id="1">
+						<cgxml:literal name="d2" value="Hawaii" />
+						<cgxml:literal name="d2" value="Oahu" />
+						<cgxml:literal name="d1" value="Aloha" />
+					</cgxml:record>
+					<cgxml:record id="2">
+					</cgxml:record>
+					<cgxml:record id="3">
+						<cgxml:literal name="d1" value="Aloha" />
+					</cgxml:record>
+					<cgxml:record id="4">
+						<cgxml:literal name="d2" value="to all" />
+						<cgxml:literal name="d1" value="Aloha" />
+					</cgxml:record>
+				</cgxml:records>
+			</cgxml:cgxml>
+		</input>
+
+		<transformation type="text/x-metamorph+xml">
+			<mm:metamorph version="1">
+				<mm:rules>
+					<mm:combine name="@greeting" value="${greet} ${island}"
+					            reset="false">
+						<mm:data source="d1" name="greet" />
+						<mm:data source="d2" name="island">
+							<mm:buffer />
+						</mm:data>
+					</mm:combine>
+					<mm:data name="tailgreeting" source="@greeting">
+						<mm:tail />
+					</mm:data>
+				</mm:rules>
+			</mm:metamorph>
+		</transformation>
+
+		<result type="text/x-cg+xml">
+			<cgxml:cgxml version="1.0">
+				<cgxml:records>
+					<cgxml:record id="0">
+					</cgxml:record>
+					<cgxml:record id="1">
+						<cgxml:literal name="tailgreeting" value="Aloha Oahu" />
+					</cgxml:record>
+					<cgxml:record id="2">
+					</cgxml:record>
+					<cgxml:record id="3">
+					</cgxml:record>
+					<cgxml:record id="4">
+					</cgxml:record>
+				</cgxml:records>
+			</cgxml:cgxml>
+		</result>
+	</test-case>
+
+</metamorph-test>
