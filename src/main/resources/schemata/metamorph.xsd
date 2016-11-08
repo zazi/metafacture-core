@@ -687,7 +687,6 @@
 			<element ref="tns:tuples" />
 			<element ref="tns:range" />
 			<element ref="tns:equalsFilter" />
-			<element ref="tns:tail" />
 		</choice>
 	</group>
 
