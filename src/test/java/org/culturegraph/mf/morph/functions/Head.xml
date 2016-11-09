@@ -3,7 +3,7 @@
                 xmlns="http://www.culturegraph.org/metamorph-test" xmlns:mm="http://www.culturegraph.org/metamorph"
                 xmlns:cgxml="http://www.culturegraph.org/cgxml">
 
-	<test-case name="tail">
+	<test-case name="head">
 		<input type="text/x-cg+xml">
 			<cgxml:cgxml version="1.0">
 				<cgxml:records>
@@ -38,8 +38,8 @@
 							<mm:buffer />
 						</mm:data>
 					</mm:combine>
-					<mm:data name="tailgreeting" source="@greeting">
-						<mm:tail />
+					<mm:data name="headgreeting" source="@greeting">
+						<mm:head />
 					</mm:data>
 				</mm:rules>
 			</mm:metamorph>
@@ -51,13 +51,14 @@
 					<cgxml:record id="0">
 					</cgxml:record>
 					<cgxml:record id="1">
-						<cgxml:literal name="tailgreeting" value="Aloha Oahu" />
+						<cgxml:literal name="headgreeting" value="Aloha Hawaii" />
 					</cgxml:record>
 					<cgxml:record id="2">
 					</cgxml:record>
 					<cgxml:record id="3">
 					</cgxml:record>
 					<cgxml:record id="4">
+						<cgxml:literal name="headgreeting" value="Aloha to all" />
 					</cgxml:record>
 				</cgxml:records>
 			</cgxml:cgxml>
