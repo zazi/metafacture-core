@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,13 +49,23 @@ public class ParseJSON extends AbstractCollectionStatelessFunction {
 			returnErrorString(processedValues);
 		}
 
-		final Object result = JsonPath.read(value, jsonPathString);
+		final Object result;
+
+		try {
+
+			result = JsonPath.read(value, jsonPathString);
+		} catch (final PathNotFoundException e) {
+
+			LOG.debug("couldn't find path '{}' in input JSON string '{}'", jsonPathString, value);
+
+			return null;
+		}
 
 		if (result == null) {
 
 			LOG.debug("JSON did not match anything in input JSON string '{}'", value);
 
-			// ro shall we return the error string instead?
+			// or shall we return the error string instead?
 			return null;
 		}
 

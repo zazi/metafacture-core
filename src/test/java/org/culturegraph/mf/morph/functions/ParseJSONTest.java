@@ -47,6 +47,37 @@ public class ParseJSONTest {
 		processParseJSON(inputString, jsonPath, errorString, expectedResult);
 	}
 
+	@Test
+	public void parseJSONTest3() throws IOException {
+
+		final URL resourceURL = Resources.getResource("morph/marc-json.json");
+		final String inputString = Resources.toString(resourceURL, Charsets.UTF_8);
+
+		final String jsonPath = "$.100[*].*[*].0[*]";
+		final String errorString = "something unexpected happened";
+		final String expectedResult = "[\"(DE-588)118627252\",\"(DE-576)163424772\"]";
+
+		processParseJSON(inputString, jsonPath, errorString, expectedResult);
+	}
+
+	@Test
+	public void parseJSONTest4() throws IOException {
+
+		final URL resourceURL = Resources.getResource("morph/marc-json-2.json");
+		final String inputString = Resources.toString(resourceURL, Charsets.UTF_8);
+
+		final String jsonPath = "$.100[*].*[*].0[*]";
+		final String errorString = "something unexpected happened";
+
+		final ParseJSON parseJSON = new ParseJSON();
+		parseJSON.setJsonPath(jsonPath);
+		parseJSON.setErrorString(errorString);
+
+		final Collection<String> actualResultCollection = parseJSON.process(inputString);
+
+		Assert.assertNull(actualResultCollection);
+	}
+
 	private static void processParseJSON(final String inputString, final String jsonPath, final String errorString, final String expectedResult)
 			throws IOException {
 

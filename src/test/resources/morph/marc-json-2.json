@@ -1,0 +1,284 @@
+{
+  "008": [
+    "891026s1807    xx             00 0 lat c"
+  ],
+  "005": [
+    "20141002121224.0"
+  ],
+  "260": [
+    {
+      "__": [
+        {
+          "a": "Lipsiae :"
+        },
+        {
+          "b": "Göschen,"
+        },
+        {
+          "c": "1807"
+        }
+      ]
+    }
+  ],
+  "084": [
+    {
+      "__": [
+        {
+          "a": "ZH 3100"
+        },
+        {
+          "2": "rvk"
+        }
+      ]
+    },
+    {
+      "__": [
+        {
+          "a": "9,10"
+        },
+        {
+          "2": "ssgn"
+        }
+      ]
+    }
+  ],
+  "041": [
+    {
+      "__": [
+        {
+          "a": "lat"
+        }
+      ]
+    }
+  ],
+  "046": [
+    {
+      "__": [
+        {
+          "j": "a19a"
+        },
+        {
+          "2": "DE-576"
+        }
+      ]
+    }
+  ],
+  "_FORMAT": "MarcXchange",
+  "_TYPE": "Bibliographic",
+  "751": [
+    {
+      "__": [
+        {
+          "a": "Leipzig"
+        },
+        {
+          "4": "pup"
+        }
+      ]
+    }
+  ],
+  "003": [
+    "DE-576"
+  ],
+  "935": [
+    {
+      "__": [
+        {
+          "b": "druck"
+        }
+      ]
+    }
+  ],
+  "007": [
+    "tu"
+  ],
+  "_LEADER": "01388cam a2200313  c4500",
+  "936": [
+    {
+      "rv": [
+        {
+          "a": "ZH 3100"
+        },
+        {
+          "b": "Bautheorie; Architekturtheorie; Architekturkritik"
+        },
+        {
+          "k": [
+            "Technik",
+            "Architektur",
+            "Architekturpraxis",
+            "Bautheorie; Architekturtheorie; Architekturkritik"
+          ]
+        },
+        {
+          "0": "200702947"
+        }
+      ]
+    }
+  ],
+  "245": [
+    {
+      "10": [
+        {
+          "a": "Marci Vitruvii Pollionis De architectura libri decem."
+        },
+        {
+          "n": "1 /"
+        },
+        {
+          "c": "ex fide librorum scriptorum recensuit, emendavit, suisque et virorum doctorum annotationibus illustravit Io. Gottlob Schneider"
+        }
+      ]
+    }
+  ],
+  "001": "018895034",
+  "040": [
+    {
+      "__": [
+        {
+          "a": "DE-576"
+        },
+        {
+          "b": "ger"
+        },
+        {
+          "c": "DE-576"
+        },
+        {
+          "e": "rakwb"
+        }
+      ]
+    }
+  ],
+  "775": [
+    {
+      "08": [
+        {
+          "i": [
+            "Online-Ausg. von Bd. 1",
+            "Online-Ausg. von Bd. 1"
+          ]
+        },
+        {
+          "a": "Vitruvius"
+        },
+        {
+          "d": "v1. Jh. : Göschen, 1807"
+        },
+        {
+          "h": "LXXVI, 312 S."
+        },
+        {
+          "w": "(DE-576)345307046"
+        }
+      ]
+    },
+    {
+      "08": [
+        {
+          "i": [
+            "Mikrofiche-Ausg. von Bd. 1",
+            "Mikrofiche-Ausg. von Bd. 1"
+          ]
+        },
+        {
+          "a": "Vitruvius"
+        },
+        {
+          "d": "v1. Jh. : Göschen, 1807"
+        },
+        {
+          "h": "LXXVI, 312 S"
+        },
+        {
+          "w": "(DE-576)074595504"
+        }
+      ]
+    }
+  ],
+  "591": [
+    {
+      "__": [
+        {
+          "a": "5090 maschinell aus ähnlichen Titelaufnahmen ergänzt"
+        }
+      ]
+    }
+  ],
+  "101": [
+    {
+      "0_": [
+        {
+          "a": "Vitruvius"
+        },
+        {
+          "d": "v1. Jh."
+        },
+        {
+          "0": [
+            "(DE-588)118627252",
+            "(DE-576)163424772"
+          ]
+        }
+      ]
+    }
+  ],
+  "773": [
+    {
+      "18": [
+        {
+          "w": "(DE-576)018894976"
+        },
+        {
+          "g": "1"
+        }
+      ]
+    }
+  ],
+  "300": [
+    {
+      "__": [
+        {
+          "a": "LXXVI, 312 S."
+        }
+      ]
+    }
+  ],
+  "924": [
+    {
+      "1_": [
+        {
+          "a": "136258603"
+        },
+        {
+          "b": "DE-14"
+        },
+        {
+          "c": "BSZ"
+        },
+        {
+          "d": "c"
+        },
+        {
+          "9": "14"
+        }
+      ]
+    }
+  ],
+  "035": [
+    {
+      "__": [
+        {
+          "a": "(OCoLC)311091968"
+        }
+      ]
+    },
+    {
+      "__": [
+        {
+          "a": "(DE-599)BSZ018895034"
+        }
+      ]
+    }
+  ]
+}
